@@ -40,7 +40,7 @@ app.get(
     next();
   },
   (request, response, next) => {
-    // this can be the end
+    request.params;
     response.send({ status: 200, data: groceriesList });
     next();
   },
@@ -49,6 +49,13 @@ app.get(
     console.log("Ending request");
   }
 );
+
+// GET http://localhost:3001/groceries
+app.get("/groceries/:item/", (req, res) => {
+  const { item } = req.params;
+  const itemObject = groceriesList.find((it) => it.item === item);
+  res.send(itemObject);
+});
 
 app.post("/grocery", (request, response) => {
   groceriesList.push(request.body);
