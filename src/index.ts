@@ -1,5 +1,6 @@
-import express = require("express");
-import { router as groceriesRoute } from "./routes/groceries";
+const express = require("express");
+import { groceriesRoute, marketsRoute } from "./routes";
+
 const app = express();
 
 const PORT = 3001;
@@ -10,6 +11,7 @@ app.use(express.urlencoded());
 
 // We can prefix this with "api" or anything you want
 app.use("/groceries", groceriesRoute);
+app.use("/markets", marketsRoute);
 
 app.listen(PORT, () => {
   console.log(`Running Express server on port ${PORT}`);
