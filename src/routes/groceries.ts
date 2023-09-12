@@ -32,3 +32,26 @@ router.post("/", (request, response) => {
   groceriesList.push(request.body);
   response.send({ status: 201 });
 });
+
+router.get("/shopping/cart", (request, response: Response) => {
+  const { cart } = request.session;
+  if (!cart) {
+    response.send("You have no cart Session");
+  } else {
+    response.send(cart);
+  }
+});
+router.post("/shopping/cart/item", (request, response) => {
+  const { item, quantity } = request.body;
+  const cartItem = { item, quantity };
+
+  const { cart } = request.session;
+  if (cart) {
+    request.session.cart.items.push(cartItem);
+  } else {
+    request.session.cart = {
+      items: [cartItem],
+    };
+  }
+  response.send({ status: 201, value: request.sessionID });
+});
