@@ -14,5 +14,7 @@ router.post("/login", (request, response) => {
       };
     }
     response.send(request.session);
+  } else {
+    response.send(401);
   }
 });
