@@ -1,10 +1,9 @@
+import { groceriesRoute, marketsRoute, authRoute } from "./routes";
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-import { groceriesRoute, marketsRoute, authRoute } from "./routes";
-
+require("./database/index");
 const app = express();
-
 const PORT = 3001;
 
 // Make sure this is declared first before using any middle ware
@@ -18,7 +17,7 @@ app.use(
     saveUninitialized: false,
   })
 );
-
+var helloWorld = "Hello World";
 app.use("/auth", authRoute);
 
 // For protecting routes
