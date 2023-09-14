@@ -1,5 +1,5 @@
 const Router = require("express");
-
+import User from "../database/schemas/User";
 export const router = Router();
 
 router.post("/login", (request, response) => {
@@ -16,5 +16,20 @@ router.post("/login", (request, response) => {
     response.send(request.session);
   } else {
     response.send(401);
+  }
+});
+
+router.post("/register", async (request, response) => {
+  const { username, password, email } = request.body;
+  const userDB = await User.findOne({ $or: [{ username }, { email }] });
+  if (userDB) {
+    response.status(400).send({ message: "User already exists!" });
+  } else {
+    console.log("Hello World");
+    const newUser = await User.create({ username, password, email });
+    response
+      .status(201)
+      .send({ message: `Hi ${username}, you have already registered` });
+    // const savedUser = (await newUser).save(); You can just not do this shit. Create handles it
   }
 });
