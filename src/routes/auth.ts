@@ -1,5 +1,6 @@
 const Router = require("express");
 import User from "../database/schemas/User";
+import { hashPassword } from "../utils/helper";
 export const router = Router();
 
 router.post("/login", (request, response) => {
@@ -25,8 +26,12 @@ router.post("/register", async (request, response) => {
   if (userDB) {
     response.status(400).send({ message: "User already exists!" });
   } else {
-    console.log("Hello World");
-    const newUser = await User.create({ username, password, email });
+    const hashedPassword = hashPassword(password);
+    const newUser = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+    });
     response
       .status(201)
       .send({ message: `Hi ${username}, you have already registered` });
