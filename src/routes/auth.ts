@@ -16,6 +16,7 @@ router.post("/login", async (request, response) => {
 
   const isValid = comparePassword(password, userDB.password);
   if (isValid) {
+    request.session.user = userDB;
     return response.send(200);
   } else {
     return response.send(401);
