@@ -5,6 +5,7 @@ const session = require("express-session");
 const passport = require("passport");
 
 require("./database/index");
+require("./strategies/local");
 const app = express();
 const PORT = 3001;
 
@@ -21,13 +22,19 @@ app.use(
 );
 app.use("/auth", authRoute);
 
+// Print routes
+app.use((req, _, next) => {
+  console.log(`Method: ${req.method}, Route: ${req.url}`);
+  next();
+});
+
 // For protecting routes
-// app.use((req, res, next) => {
-//   if (req.session.user) next();
-//   else {
-//     res.send(401);
-//   }
-// });
+app.use((req, res, next) => {
+  if (req.session.user) next();
+  else {
+    res.send(401);
+  }
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
