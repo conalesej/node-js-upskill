@@ -28,9 +28,11 @@ passport.use(
           console.log("Authenticated Successfully");
           done(null, userDB);
         } else {
+          console.log("Invalid Authentication");
           done(null, null);
         }
       } catch (e) {
+        console.log({ e });
         done(e, null);
       }
     }
