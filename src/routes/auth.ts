@@ -1,26 +1,32 @@
 const Router = require("express");
+const passport = require("passport");
 import User from "../database/schemas/User";
 import { comparePassword, hashPassword } from "../utils/helper";
 export const router = Router();
 
-router.post("/login", async (request, response) => {
-  const { email, password } = request.body;
+// router.post("/login", async (request, response) => {
+//   const { email, password } = request.body;
 
-  if (!email || !password)
-    return response
-      .status(400)
-      .send({ message: "Email or Password required!" });
+//   if (!email || !password)
+//     return response
+//       .status(400)
+//       .send({ message: "Email or Password required!" });
 
-  const userDB = await User.findOne({ email });
-  if (!userDB) return response.send(401);
+//   const userDB = await User.findOne({ email });
+//   if (!userDB) return response.send(401);
 
-  const isValid = comparePassword(password, userDB.password);
-  if (isValid) {
-    request.session.user = userDB;
-    return response.send(200);
-  } else {
-    return response.send(401);
-  }
+//   const isValid = comparePassword(password, userDB.password);
+//   if (isValid) {
+//     request.session.user = userDB;
+//     return response.send(200);
+//   } else {
+//     return response.send(401);
+//   }
+// });
+
+router.post("/login", passport.authenticate("local"), (req, res) => {
+  console.log("logged in");
+  res.send(200);
 });
 
 router.post("/register", async (request, response) => {
