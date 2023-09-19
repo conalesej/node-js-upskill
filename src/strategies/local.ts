@@ -5,6 +5,26 @@ import { Strategy } from "passport-local";
 import UserModel from "../database/schemas/User";
 import { comparePassword } from "../utils/helper";
 
+passport.serializeUser((user, done) => {
+  // console.log("Serializing User", user);
+
+  done(null, user.id);
+});
+
+// Taking the id from the session then search the database
+passport.deserializeUser(async (id, done) => {
+  console.log("Deserializing User", { id });
+  try {
+    const user = await UserModel.findById(id);
+    console.log({ user });
+    if (!user) throw new Error("User not found");
+    done(null, user);
+  } catch (e) {
+    console.log(e);
+    done(e, null);
+  }
+});
+
 passport.use(
   new Strategy(
     {
