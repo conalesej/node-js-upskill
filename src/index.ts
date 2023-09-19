@@ -1,6 +1,7 @@
 import { groceriesRoute, marketsRoute, authRoute } from "./routes";
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const mongoStore = require("connect-mongo");
 const session = require("express-session");
 const passport = require("passport");
 
@@ -9,6 +10,7 @@ require("./database/index");
 
 const app = express();
 const PORT = 3001;
+const memoryStore = new session.MemoryStore();
 
 // Make sure this is declared first before using any middle ware
 app.use(express.json());
@@ -19,6 +21,9 @@ app.use(
     secret: "WEIORFHLWEKR23823230j9mlksd/,k.vxcnb;ke",
     resave: false,
     saveUninitialized: false,
+    store: mongoStore.create({
+      mongoUrl: "mongodb://127.0.0.1:27017/expressjs_tutorial",
+    }),
   })
 );
 app.use(passport.initialize());
